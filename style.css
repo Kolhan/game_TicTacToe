@@ -1,0 +1,25 @@
+body {
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font:30px sans-serif;
+}
+.board{
+    display: grid;
+    /* grid-template-columns: repeat(3, 60px);
+    grid-template-rows: repeat(3, 60px); */
+    grid-gap: 10px;
+}
+.square {
+    box-shadow: 0 0 5px 0 #0006;
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+.win {
+    background-color: chartreuse;
+}
