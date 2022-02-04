@@ -23,3 +23,22 @@ body {
 .win {
     background-color: chartreuse;
 }
+.btnNewGame {
+    padding: 5px;
+    width: 100%;
+    border-radius: 8px;
+}
+.rowBtn {
+    display: grid;
+    grid-template-columns: 1fr 60px;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+input[type=number] {
+    text-align: center;
+}
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button {
+  opacity: 1;
+}

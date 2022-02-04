@@ -1,17 +1,29 @@
+const btnNewGame = document.querySelector('.btnNewGame')
+btnNewGame.addEventListener('click', startGame)
+
+
 const board = document.querySelector('.board')
 let items = document.getElementsByClassName('square')
 let symbol = 'X'
 let field = []
-const COUNT = 3
-board.style.gridTemplateColumns = `repeat(${COUNT}, 60px)`
-board.style.gridTemplateRows = `repeat(${COUNT}, 60px)`
+let COUNT = 4
+
 let steps = COUNT ** 2, win = false
 
-for(let i = 0; i < COUNT; i++) { 
-    field[i] = []
-}
+
+
+
 
 function startGame() {
+    COUNT = +document.querySelector('#COUNT').value
+    board.style.gridTemplateColumns = `repeat(${COUNT}, 60px)`
+    board.style.gridTemplateRows = `repeat(${COUNT}, 60px)`
+
+    field = []
+    for(let i = 0; i < COUNT; i++) { 
+        field[i] = []
+    }
+
     win = false
     steps = COUNT ** 2
     board.innerHTML = ''
@@ -26,11 +38,6 @@ function startGame() {
     }
 }
 
-
-
-
-console.log(items);
-
 function toogleChar(char) {
     return char === 'X' ? 'O': 'X'
 }
@@ -42,7 +49,25 @@ function fillField(n,char) {
 }
 
 function checkWin(s) {
+    //console.clear()
+    /*
+        COUNT = 4
+        [[00],[01],[02],[03]],
+        [[10],[11],[12],[13]],
+        [[20],[21],[22],[23]],
+        [[30],[31],[32],[33]],
+
+        [[0],[1],[2],[3]],
+        [[4],[5],[6],[7]],
+        [[8],[9],[10],[11]],
+        [[12],[13],[14],[15]],
+    */
+
+    let indexes_i1 = []
+    let indexes_i2 = []
+    let j2 = COUNT-1
     for(let i = 0; i < COUNT; i++) { 
+        //-горизонтальная------------------------------
         let flag = true 
         let indexes = []
         for(let j = 0; j < COUNT; j++) { 
@@ -50,11 +75,11 @@ function checkWin(s) {
                 indexes.push(i*COUNT+j)
                 if (j === COUNT - 1 && flag) {
                     showWin(indexes)
-                    endGame(`${s} win!`)
+                    endGame(`${s} win! [ - ]`)
                 }
-            }
+            } else { flag = false}
         }
-        //-------------------------------
+        //-вертикальная------------------------------
         indexes = []
         flag = true 
         for(let j = 0; j < COUNT; j++) { 
@@ -62,33 +87,29 @@ function checkWin(s) {
                 indexes.push(j*COUNT+i)
                 if (j === COUNT - 1 && flag) {
                     showWin(indexes)
-                    endGame(`${s} win!`)
+                    endGame(`${s} win! [ | ]`)
                 }
+            } else { flag = false}
+        }
+        //-диагональ 1------------------------------
+        if (field[i][i] === s) {
+            indexes_i1.push(i*COUNT+i)           
+            if (indexes_i1.length === COUNT) {
+                showWin(indexes_i1)
+                endGame(`${s} win! [ \\ ]`)
             }
         }
-        // if( field[0][i] === s &&
-        //     field[1][i] === s &&
-        //     field[2][i] === s
-        // ) {
-        //     showWin([0*COUNT+i,1*COUNT+i,2*COUNT+i])
-        //     endGame(`${s} win!`)
-        // }
-    }
 
-    if( field[0][0] === s &&
-        field[1][1] === s &&
-        field[2][2] === s
-    ) {
-        showWin([0,4,8])
-        endGame(`${s} win!`)
-    }
+        //-диагональ 2------------------------------                        
+        if (field[i][j2] === s) {
+            indexes_i2.push(COUNT*i+j2)       
+            if (indexes_i2.length === COUNT) {
+                showWin(indexes_i2)
+                endGame(`${s} win! [ / ]`)
+            }
+        }
+        j2--
 
-    if( field[0][2] === s &&
-        field[1][1] === s &&
-        field[2][0] === s
-    ) {
-        showWin([2,4,6])
-        endGame(`${s} win!`)
     }
 }
 
@@ -99,7 +120,7 @@ function setStep(e) {
         steps--
         el.textContent = symbol
         fillField(pos, symbol)
-        console.table(field);
+        //console.table(field);
 
         checkWin(symbol);
         symbol = toogleChar(symbol)
